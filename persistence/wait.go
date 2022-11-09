@@ -10,17 +10,17 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
-type QueryManager struct {
-	DQ interfaces.DynamoDbQueryAPI
+type WaitManager struct {
+	DQ interfaces.DynamoDbWaiterAPI
 }
 
-func NewQueryManager(dynaWaiter interfaces.DynamoDbQueryAPI) *QueryManager {
-	return &QueryManager{
+func NewWaitManager(dynaWaiter interfaces.DynamoDbWaiterAPI) *WaitManager {
+	return &WaitManager{
 		DQ: dynaWaiter,
 	}
 }
 
-func (q *QueryManager) WaitTodoTable() error {
+func (q *WaitManager) WaitTodoTable() error {
 	if err := q.DQ.Wait(context.TODO(), &dynamodb.DescribeTableInput{
 		TableName: aws.String("todo"),
 	}, 30*time.Second); err != nil {

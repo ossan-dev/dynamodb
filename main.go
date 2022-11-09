@@ -19,7 +19,7 @@ func main() {
 	dynaClient := dynamodb.NewFromConfig(*cfg)
 	dynaManager := persistence.NewTodoTableManager(dynaClient)
 	dynaWaiter := dynamodb.NewTableExistsWaiter(dynaClient)
-	queryManager := persistence.NewQueryManager(dynaWaiter)
+	queryManager := persistence.NewWaitManager(dynaWaiter)
 	cmdManager := persistence.NewCommandManager(dynaClient)
 
 	// create table
@@ -43,4 +43,6 @@ func main() {
 	if err = cmdManager.InsertTodo(1, "Programming", "Complete DynamoDb Tutorial"); err != nil {
 		panic(err)
 	}
+
+	// get item by id
 }
