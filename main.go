@@ -40,7 +40,7 @@ func main() {
 	}
 
 	// write to DynamoDb
-	if err = cmdManager.InsertTodo("Programming", "Complete DynamoDb Tutorial"); err != nil {
+	if err = cmdManager.InsertTodo(1, "Programming", "Complete DynamoDb Tutorial"); err != nil {
 		panic(err)
 	}
 }

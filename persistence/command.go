@@ -2,6 +2,7 @@ package persistence
 
 import (
 	"context"
+	"strconv"
 	"time"
 
 	"dynamodbdemo/interfaces"
@@ -21,11 +22,11 @@ func NewCommandManager(dynaCmd interfaces.DynamoDbCommandAPI) *CommandManager {
 	}
 }
 
-func (c *CommandManager) InsertTodo(category, description string) error {
+func (c *CommandManager) InsertTodo(id int, category, description string) error {
 	_, err := c.DC.PutItem(context.TODO(), &dynamodb.PutItemInput{
 		TableName: aws.String("todo"),
 		Item: map[string]types.AttributeValue{
-			"id":           &types.AttributeValueMemberN{Value: "1"},
+			"id":           &types.AttributeValueMemberN{Value: strconv.Itoa(id)},
 			"category":     &types.AttributeValueMemberS{Value: category},
 			"description":  &types.AttributeValueMemberS{Value: description},
 			"is_completed": &types.AttributeValueMemberS{Value: "false"},
