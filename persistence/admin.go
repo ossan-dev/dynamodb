@@ -11,17 +11,19 @@ import (
 )
 
 type StorageManager struct {
-	DA interfaces.DynamoDbAdminAPI
+	DC interfaces.DynamoDbTableCreateAPI
+	DD interfaces.DynamoDbTableDeleteAPI
 }
 
-func NewTodoTableManager(dyna interfaces.DynamoDbAdminAPI) *StorageManager {
+func NewTodoTableManager(dynaCreate interfaces.DynamoDbTableCreateAPI, dynaDelete interfaces.DynamoDbTableDeleteAPI) *StorageManager {
 	return &StorageManager{
-		DA: dyna,
+		DC: dynaCreate,
+		DD: dynaDelete,
 	}
 }
 
 func (s *StorageManager) CreateTodoTable() error {
-	_, err := s.DA.CreateTable(context.TODO(), &dynamodb.CreateTableInput{
+	_, err := s.DC.CreateTable(context.TODO(), &dynamodb.CreateTableInput{
 		TableName: aws.String("todo"),
 		AttributeDefinitions: []types.AttributeDefinition{
 			{
@@ -45,7 +47,7 @@ func (s *StorageManager) CreateTodoTable() error {
 }
 
 func (s *StorageManager) DeleteTodoTable() error {
-	_, err := s.DA.DeleteTable(context.TODO(), &dynamodb.DeleteTableInput{
+	_, err := s.DD.DeleteTable(context.TODO(), &dynamodb.DeleteTableInput{
 		TableName: aws.String("todo"),
 	})
 	if err != nil {

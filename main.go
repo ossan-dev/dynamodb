@@ -18,7 +18,7 @@ func main() {
 	}
 
 	dynaClient := dynamodb.NewFromConfig(*cfg)
-	dynaManager := persistence.NewTodoTableManager(dynaClient)
+	dynaManager := persistence.NewTodoTableManager(dynaClient, dynaClient)
 	dynaWaiter := dynamodb.NewTableExistsWaiter(dynaClient)
 	waitManager := persistence.NewWaitManager(dynaWaiter)
 	queryManager := persistence.NewQueryManager(dynaClient)
