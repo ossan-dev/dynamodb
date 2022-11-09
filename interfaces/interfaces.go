@@ -2,6 +2,7 @@ package interfaces
 
 import (
 	"context"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
@@ -9,4 +10,8 @@ import (
 type DynamoDbAdminAPI interface {
 	CreateTable(ctx context.Context, params *dynamodb.CreateTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.CreateTableOutput, error)
 	DeleteTable(ctx context.Context, params *dynamodb.DeleteTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteTableOutput, error)
+}
+
+type DynamoDbQuery interface {
+	Wait(ctx context.Context, params *dynamodb.DescribeTableInput, maxWaitDur time.Duration, optFns ...func(*dynamodb.TableExistsWaiterOptions)) error
 }
