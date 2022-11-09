@@ -11,10 +11,10 @@ import (
 )
 
 type QueryManager struct {
-	DQ interfaces.DynamoDbQuery
+	DQ interfaces.DynamoDbQueryAPI
 }
 
-func NewQueryManager(dynaWaiter interfaces.DynamoDbQuery) *QueryManager {
+func NewQueryManager(dynaWaiter interfaces.DynamoDbQueryAPI) *QueryManager {
 	return &QueryManager{
 		DQ: dynaWaiter,
 	}
