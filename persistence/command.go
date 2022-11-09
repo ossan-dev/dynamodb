@@ -2,10 +2,11 @@ package persistence
 
 import (
 	"context"
+	"encoding/json"
 	"strconv"
-	"time"
 
 	"dynamodbdemo/interfaces"
+	"dynamodbdemo/models"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -23,14 +24,16 @@ func NewCommandManager(dynaCmd interfaces.DynamoDbCommandAPI) *CommandManager {
 }
 
 func (c *CommandManager) InsertTodo(id int, category, description string) error {
-	_, err := c.DC.PutItem(context.TODO(), &dynamodb.PutItemInput{
+	todo := models.NewTodo(id, category, description)
+	todoBytes, err := json.Marshal(todo)
+	if err != nil {
+		return err
+	}
+	_, err = c.DC.PutItem(context.TODO(), &dynamodb.PutItemInput{
 		TableName: aws.String("todo"),
 		Item: map[string]types.AttributeValue{
-			"id":           &types.AttributeValueMemberN{Value: strconv.Itoa(id)},
-			"category":     &types.AttributeValueMemberS{Value: category},
-			"description":  &types.AttributeValueMemberS{Value: description},
-			"is_completed": &types.AttributeValueMemberS{Value: "false"},
-			"created_on":   &types.AttributeValueMemberS{Value: time.Now().Format("2006-01-02 15:04:05")},
+			"id":   &types.AttributeValueMemberN{Value: strconv.Itoa(id)},
+			"todo": &types.AttributeValueMemberS{Value: string(todoBytes)},
 		},
 	})
 	if err != nil {

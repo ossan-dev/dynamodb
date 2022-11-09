@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dynamodbdemo/models"
 	"dynamodbdemo/persistence"
 	"dynamodbdemo/utils"
 
@@ -19,7 +20,8 @@ func main() {
 	dynaClient := dynamodb.NewFromConfig(*cfg)
 	dynaManager := persistence.NewTodoTableManager(dynaClient)
 	dynaWaiter := dynamodb.NewTableExistsWaiter(dynaClient)
-	queryManager := persistence.NewWaitManager(dynaWaiter)
+	waitManager := persistence.NewWaitManager(dynaWaiter)
+	queryManager := persistence.NewQueryManager(dynaClient)
 	cmdManager := persistence.NewCommandManager(dynaClient)
 
 	// create table
@@ -35,7 +37,7 @@ func main() {
 	}()
 
 	// wait for the table creation
-	if err = queryManager.WaitTodoTable(); err != nil {
+	if err = waitManager.WaitTodoTable(); err != nil {
 		panic(err)
 	}
 
@@ -45,4 +47,10 @@ func main() {
 	}
 
 	// get item by id
+	var todo *models.Todo
+	if todo, err = queryManager.GetTodoById(1); err != nil {
+		panic(err)
+	}
+
+	todo.PrintInfo()
 }

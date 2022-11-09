@@ -12,7 +12,7 @@ import (
 // HACK: this func serves to switch the env used
 func GetAwsConfig() (*aws.Config, error) {
 	cfg, err := config.LoadDefaultConfig(context.TODO(),
-		config.WithClientLogMode(aws.LogRequestWithBody|aws.LogResponseWithBody),
+		// config.WithClientLogMode(aws.LogRequestWithBody|aws.LogResponseWithBody),
 		config.WithRegion("eu-west-1"),
 		config.WithHTTPClient(&http.Client{Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},

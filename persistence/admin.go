@@ -28,19 +28,11 @@ func (s *StorageManager) CreateTodoTable() error {
 				AttributeName: aws.String("id"),
 				AttributeType: types.ScalarAttributeTypeN,
 			},
-			{
-				AttributeName: aws.String("category"),
-				AttributeType: types.ScalarAttributeTypeS,
-			},
 		},
 		KeySchema: []types.KeySchemaElement{
 			{
 				AttributeName: aws.String("id"),
 				KeyType:       types.KeyTypeHash,
-			},
-			{
-				AttributeName: aws.String("category"),
-				KeyType:       types.KeyTypeRange,
 			},
 		},
 		BillingMode: types.BillingModePayPerRequest,
