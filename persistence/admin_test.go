@@ -11,11 +11,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type mockDynamoDbAdminAPI struct {
+type mockDynamoDbTableCreateAPI struct {
 	fnCreateTable func(ctx context.Context, params *dynamodb.CreateTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.CreateTableOutput, error)
 }
 
-func (m *mockDynamoDbAdminAPI) CreateTable(ctx context.Context, params *dynamodb.CreateTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.CreateTableOutput, error) {
+func (m *mockDynamoDbTableCreateAPI) CreateTable(ctx context.Context, params *dynamodb.CreateTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.CreateTableOutput, error) {
 	return m.fnCreateTable(ctx, params, optFns...)
 }
 
@@ -43,7 +43,7 @@ func TestCreateTodoTable(t *testing.T) {
 
 	for _, tt := range testSuite {
 		t.Run(tt.name, func(t *testing.T) {
-			client := &mockDynamoDbAdminAPI{
+			client := &mockDynamoDbTableCreateAPI{
 				fnCreateTable: tt.fnCreateTable,
 			}
 			sut := persistence.NewTodoTableManager(client, nil)
