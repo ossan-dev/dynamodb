@@ -3,6 +3,7 @@ package persistence
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"strconv"
 
 	"dynamodbdemo/interfaces"
@@ -39,6 +40,10 @@ func (q *QueryManager) GetTodoById(id int) (*models.Todo, error) {
 
 	if err = attributevalue.Unmarshal(res.Item["todo"], &rawTodo); err != nil {
 		return nil, err
+	}
+
+	if rawTodo == "" {
+		return nil, errors.New("todo not found")
 	}
 
 	if err = json.Unmarshal([]byte(rawTodo), &todo); err != nil {
